@@ -16,75 +16,7 @@ The goal of this project was to take an existing static cycle website and build 
 The infrastructure is provisioned using Terraform, the website runs inside Docker containers using Nginx, and GitHub Actions handles the CI/CD pipeline.
 The application has separate staging and production environments.
 CloudWatch is used for centralized logging and monitoring of the infrastructure and application traffic.
-
-High-Level Flow :
-Developer
-    │
-    │ Pull Request
-    ▼
-GitHub
-    │
-    ├── Tests
-    └── Docker Build
-    │
-    │ Merge to main
-    ▼
-GitHub Actions
-    │
-    ├── Build Docker Image
-    │
-    ├── Push Image
-    │       │
-    │       ▼
-    │   GitHub Container Registry
-    │
-    └── Deploy
-            │
-            ▼
-        Staging EC2
-            │
-            │ Manual Approval
-            ▼
-        Production EC2
-
-Architecture
-The application is deployed inside a custom AWS VPC.
-FLOWCHART :
-DEVELOPMENT
-                         │
-                         ▼
-                   GitHub PR
-                         │
-                         ▼
-                 Validation + Test
-                         │
-                         ▼
-                   Merge to main
-                         │
-                         ▼
-                Build Docker Image
-                         │
-                         ▼
-                   Push to GHCR
-                         │
-                         ▼
-                 Deploy STAGING
-                         │
-                         ▼
-                  Verify Staging
-                         │
-                         ▼
-                  Manual Approval
-                         │
-                         ▼
-                Deploy PRODUCTION
-                         │
-                         ▼
-                Verify Production
-                         │
-                         ▼
-               CloudWatch Monitoring
-  
+The application is deployed inside a custom AWS VPC
 Note: The current website is a static frontend, so the PostgreSQL database is provisioned as part of the infrastructure but is not directly used by the website application.
 AWS Infrastructure
 Terraform provisions the following AWS resources.

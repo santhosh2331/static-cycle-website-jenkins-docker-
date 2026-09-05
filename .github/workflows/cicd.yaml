@@ -44,8 +44,6 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t cycle-website:latest .
-
-
   push-image:
     name: Push Docker Image
     needs: build
@@ -66,115 +64,10 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
-            -t ghcr.io/varshitha2303/cycle-website:latest \
+            -t ghcr.io/santhosh2331/cycle-website:latest \
             .
 
       - name: Push Docker image
         run: |
-          docker push ghcr.io/varshitha2303/cycle-website:latest
-
-
-  deploy-staging:
-    name: Deploy to Staging
-    needs: push-image
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Deploy application to staging EC2
-        uses: appleboy/ssh-action@v1.2.2
-        with:
-          host: ${{ secrets.STAGINGHOST }}
-          username: ${{ secrets.STAGINGUSER }}
-          key: ${{ secrets.EC2KEY }}
-          script: |
-            echo "Pulling latest application image..."
-
-            docker pull ghcr.io/varshitha2303/cycle-website:latest
-
-            echo "Stopping existing container..."
-
-            docker stop cycle-website || true
-            docker rm cycle-website || true
-
-            echo "Starting new container..."
-
-            docker run -d \
-              --name cycle-website \
-              --restart unless-stopped \
-              -p 8080:80 \
-              ghcr.io/varshitha2303/cycle-website:latest
-
-            echo "Cleaning unused Docker images..."
-
-            docker image prune -f
-
-            echo "Deployment completed."
-
-      - name: Verify staging container
-        uses: appleboy/ssh-action@v1.2.2
-        with:
-          host: ${{ secrets.STAGINGHOST }}
-          username: ${{ secrets.STAGINGUSER }}
-          key: ${{ secrets.EC2KEY }}
-          script: |
-            docker ps --filter "name=cycle-website"
-            curl -f http://localhost:8080
-
-
-  production-approval:
-    name: Production Approval
-    needs: deploy-staging
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    environment:
-      name: production1
-
-    steps:
-      - name: Production deployment approved
-        run: echo "Production deployment approved."
-  deploy-production:
-    name: Deploy to Production
-    needs: deploy-staging
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-
-    environment:
-      name: production1
-
-    steps:
-      - name: Deploy application to production EC2
-        uses: appleboy/ssh-action@v1.2.2
-        with:
-          host: ${{ secrets.PRODUCTIONHOST }}
-          username: ec2-user
-          key: ${{ secrets.EC2KEY }}
-          script: |
-            echo "Pulling latest application image..."
-
-            docker pull ghcr.io/varshitha2303/cycle-website:latest
-
-            echo "Stopping existing container..."
-
-            docker stop cycle-website || true
-            docker rm cycle-website || true
-
-            echo "Starting new container..."
-
-            docker run -d \
-              --name cycle-website \
-              --restart unless-stopped \
-              -p 8080:80 \
-              ghcr.io/varshitha2303/cycle-website:latest
-
-            echo "Deployment completed."
-
-      - name: Verify production deployment
-        uses: appleboy/ssh-action@v1.2.2
-        with:
-          host: ${{ secrets.PRODUCTIONHOST }}
-          username: ec2-user
-          key: ${{ secrets.EC2KEY }}
-          script: |
-            docker ps --filter "name=cycle-website"
-            curl -f http://localhost:8080
+          docker push ghcr.io/santhosh2331/cycle-website:latest
+  

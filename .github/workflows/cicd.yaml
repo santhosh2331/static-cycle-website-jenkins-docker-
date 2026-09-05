@@ -44,7 +44,7 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t cycle-website:latest .
-  push-image:
+   push-image:
     name: Push Docker Image
     needs: build
     if: github.event_name == 'push'
@@ -70,11 +70,14 @@ jobs:
       - name: Push Docker image
         run: |
           docker push ghcr.io/santhosh2331/cycle-website:latest
+
+
   deploy-staging:
     name: Deploy to Staging
     needs: push-image
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
+
     steps:
       - name: Deploy application to staging EC2
         uses: appleboy/ssh-action@v1.2.2
@@ -115,7 +118,9 @@ jobs:
           script: |
             docker ps --filter "name=cycle-website"
             curl -f http://localhost:8080
-            production-approval:
+
+
+  production-approval:
     name: Production Approval
     needs: deploy-staging
     if: github.event_name == 'push'

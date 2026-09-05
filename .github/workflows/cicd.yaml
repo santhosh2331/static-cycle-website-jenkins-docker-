@@ -178,3 +178,5 @@ jobs:
           script: |
             docker ps --filter "name=cycle-website"
             curl -f http://localhost:8080
+            
+            

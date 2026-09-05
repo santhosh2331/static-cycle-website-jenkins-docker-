@@ -158,8 +158,16 @@ jobs:
               --name cycle-website \
               --restart unless-stopped \
               -p 8080:80 \
-              ghcr.io/sa/cycle-website:latest
+              ghcr.io/santhosh2331/cycle-website:latest
 
             echo "Deployment completed."
 
-      
+      - name: Verify production deployment
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.PRODUCTIONHOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2KEY }}
+          script: |
+            docker ps --filter "name=cycle-website"
+            curl -f http://localhost:8080

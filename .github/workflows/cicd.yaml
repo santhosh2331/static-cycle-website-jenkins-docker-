@@ -75,7 +75,6 @@ jobs:
     needs: push-image
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
-
     steps:
       - name: Deploy application to staging EC2
         uses: appleboy/ssh-action@v1.2.2

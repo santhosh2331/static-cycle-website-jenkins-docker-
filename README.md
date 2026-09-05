@@ -9,7 +9,7 @@ The project demonstrates an end-to-end DevOps workflow covering:
 * Manual production approval
 * Centralized logging
 * Infrastructure and application monitoring
-* CloudWatch dashboards and alerts
+* CloudWatch dashboards and alerts.
 
 Project Overview:
 The goal of this project was to take an existing static cycle website and build a complete AWS-based DevOps deployment around it.
